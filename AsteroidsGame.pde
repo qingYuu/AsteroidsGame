@@ -1,16 +1,100 @@
-//your variable declarations here
+Stars [] vers = new Stars[100];
+SpaceShip deucalion = new SpaceShip();
+
+
 public void setup() 
 {
-  //your code here
+  size(300,300);
+  //background(225,225,225);
+  
+  for(int i =0; i<vers.length; i++)
+  {
+    vers[i] = new Stars();
+    
+  }
 }
 public void draw() 
 {
-  //your code here
+ background(0,0,0);
+ deucalion.show();
+ deucalion.move();
+
+ for(int m =0; m<vers.length; m++)
+ {
+  vers[m].show();
 }
-class SpaceShip //extends Floater  
-{   
-    //your code here
+
 }
+ public void keyPressed()
+      {
+        if(keyCode == RIGHT)
+        {
+          deucalion.rotate(5);
+        }
+        if(keyCode == LEFT)
+        {
+          deucalion.rotate(-5);
+        }
+        if(keyCode== UP)
+        { 
+          deucalion.accelerate(0.009);
+        } 
+        if(key ==' ')
+        {
+          deucalion.setX((int)(Math.random()*390));
+          deucalion.setY((int)(Math.random()*390));
+        }
+      }
+
+class Stars 
+{
+  private int x, y, cA, cB, cC;
+  public Stars()
+  {
+    x=(int)(Math.random()*300);
+    y=(int)(Math.random()*300);
+    cA=(int)(Math.random()*220)-27;
+    cB=(int)(Math.random()*220)-34;
+    cC=(int)(Math.random()*220)-10;
+  }
+  public void show()
+  {
+    stroke(cB);
+    fill(cB,cA,cC);
+    ellipse(x,y,1,1);
+  }
+}
+class SpaceShip extends Floater  
+{  
+    public SpaceShip()
+    {
+
+      corners=10;
+      xCorners=new int [corners];
+      yCorners=new int [corners];
+      int [] xC={10,-7,-1,-6,-7,-8,-7,-6,-1,-7};
+      int [] yC={0,15,3,0,1,0,-1,0,-3,-15};
+      xCorners=xC;
+      yCorners=yC;     
+      myColor=color(235,80,19);
+      myDirectionX=0;
+      myDirectionY=0;
+      myCenterX=150;
+      myCenterY=150;
+      myPointDirection=0;
+    } 
+      public void setX(int x){myCenterX=x;}
+      public int  getX(){return (int)myCenterX;}
+      public void  setY(int y){myCenterY=y;}
+      public int  getY(){return (int)myCenterY;}
+      public void  setDirectionX(double x){myDirectionX=x;}
+      public double  getDirectionX(){return myDirectionX;}
+      public void  setDirectionY(double y){myDirectionY=y;}
+      public double  getDirectionY(){return myDirectionY;}
+      public void  setPointDirection(int degrees){myPointDirection=degrees;}
+      public double  getPointDirection(){return myPointDirection;}
+}
+
 abstract class Floater //Do NOT modify the Floater class! Make changes in the SpaceShip class 
 {   
   protected int corners;  //the number of corners, a triangular floater has 3   
@@ -82,7 +166,8 @@ abstract class Floater //Do NOT modify the Floater class! Make changes in the Sp
       //rotate and translate the coordinates of the floater using current direction 
       xRotatedTranslated = (int)((xCorners[nI]* Math.cos(dRadians)) - (yCorners[nI] * Math.sin(dRadians))+myCenterX);     
       yRotatedTranslated = (int)((xCorners[nI]* Math.sin(dRadians)) + (yCorners[nI] * Math.cos(dRadians))+myCenterY);      
-      vertex(xRotatedTranslated,yRotatedTranslated);    
+      vertex(xRotatedTranslated,yRotatedTranslated);
+      //System.out.println(xRotatedTranslated +", " +yRotatedTranslated);    
     }   
     endShape(CLOSE);  
   }   
