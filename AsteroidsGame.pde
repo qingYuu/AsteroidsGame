@@ -1,10 +1,11 @@
 
 SpaceShip deucalion = new SpaceShip();
 Stars [] vers = new Stars[100];
+ArrayList<Rinda> rocklist = new ArrayList<Rinda>(); 
 
 public void setup() 
 {
-  size(300,300);
+  size(700,700);
 
   
   for(int i =0; i<vers.length; i++)
@@ -12,6 +13,11 @@ public void setup()
     vers[i] = new Stars();
     
   }
+  for(int r =0; r<10; r++)
+  {
+    rocklist.add(new Rinda());
+  }
+
 }
 public void draw() 
 {
@@ -19,11 +25,22 @@ public void draw()
  deucalion.show();
  deucalion.move();
 
+
  for(int m =0; m<vers.length; m++)
  {
   vers[m].show();
-}
+ }
+ for(int n =0; n<rocklist.size(); n++)
+ {
+  rocklist.get(n).move();
+  rocklist.get(n).show();
+  if(dist(deucalion.getX(), deucalion.getY(),rocklist.get(n).getX(), rocklist.get(n).getY())<20)
+  {
+    rocklist.remove(n);
+    rocklist.add(new Rinda());
+  }
 
+ } 
 }
  public void keyPressed()
       {
@@ -56,7 +73,7 @@ class SpaceShip extends Floater
 {  
     public SpaceShip()
     {
-
+      
       corners=10;
       xCorners=new int [corners];
       yCorners=new int [corners];
@@ -67,9 +84,10 @@ class SpaceShip extends Floater
       myColor=color(235,80,19);
       myDirectionX=0;
       myDirectionY=0;
-      myCenterX=150;
-      myCenterY=150;
+      myCenterX=350;
+      myCenterY=350;
       myPointDirection=0;
+      boolean loseGame= false;
     } 
       public void setX(int x){myCenterX=x;}
       public int  getX(){return (int)myCenterX;}
@@ -81,6 +99,7 @@ class SpaceShip extends Floater
       public double  getDirectionY(){return myDirectionY;}
       public void  setPointDirection(int degrees){myPointDirection=degrees;}
       public double  getPointDirection(){return myPointDirection;}
+   
 }
 class Rinda extends Floater
 {
@@ -88,6 +107,21 @@ class Rinda extends Floater
       public Rinda()
       {
        rota = (int)(Math.random()*1)-1;
+       //Make the asteroid
+       corners=8;
+       xCorners=new int[corners];
+       yCorners=new int[corners];
+       int [] xC ={3,8,6,6,-1,-3,-7,-3};
+       int [] yC ={6,0,-6,-10,-6,-3,-2,6};
+       xCorners= xC;
+       yCorners= yC;
+       myColor=color(225,225,225);
+       myDirectionX=(int)(Math.random()*7)-3;
+       myDirectionY=(int)(Math.random()*7)-3;
+       myCenterX=(int)(Math.random()*700);
+       myCenterY=(int)(Math.random()*700);
+       myPointDirection=0;
+
       }
       public void setX(int x){myCenterX=x;}
       public int  getX(){return (int)myCenterX;}
@@ -105,13 +139,41 @@ class Rinda extends Floater
        super.move();
       }
 }
+class Inaho extends Floater
+{ 
+  public Inaho(SpaceShip deucalion)
+  {
+   myPointDirection= deucalion.getPointDirection();
+   double dRadians =myPointDirection*(Math.PI/180);
+   myDirectionX= 5 * Math.cos(dRadians) + deucalion.getDirectionX();
+   myDirectionY= 5 * Math.sin(dRadians) + deucalion.getDirectionY();
+   myCenterX=deucalion.getX();
+   myCenterY=deucalion.getY();
+   
+  }
+  public void setX(int x){myCenterX=x;}
+  public int  getX(){return (int)myCenterX;}
+  public void  setY(int y){myCenterY=y;}
+  public int  getY(){return (int)myCenterY;}
+  public void  setDirectionX(double x){myDirectionX=x;}
+  public double  getDirectionX(){return myDirectionX;}
+  public void  setDirectionY(double y){myDirectionY=y;}
+  public double  getDirectionY(){return myDirectionY;}
+  public void  setPointDirection(int degrees){myPointDirection=degrees;}
+  public double  getPointDirection(){return myPointDirection;}
+  
+  public void move()
+  {
+    super.move();
+  }
+}
 class Stars 
 {
   private int x, y, cA, cB, cC;
   public Stars()
   {
-    x=(int)(Math.random()*300);
-    y=(int)(Math.random()*300);
+    x=(int)(Math.random()*700);
+    y=(int)(Math.random()*700);
     cA=(int)(Math.random()*220)-27;
     cB=(int)(Math.random()*220)-34;
     cC=(int)(Math.random()*220)-10;
